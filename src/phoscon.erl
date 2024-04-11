@@ -60,12 +60,7 @@
 	       ip_port,
 	       crypto
 	      }).
--record(device,{
-		logic_name,
-		num_id,
-		module
-	       }).
-	
+
 
 %% ====================================================================
 %% External functions
@@ -301,33 +296,3 @@ code_change(_OldVsn, State, _Extra) ->
 %% --------------------------------------------------------------------
 %%% Internal functions
 %% --------------------------------------------------------------------
-
-%% --------------------------------------------------------------------
-%% Function:start/0 
-%% Description: Initiate the eunit tests, set upp needed processes etc
-%% Returns: non
-%% --------------------------------------------------------------------
-connect_etcd()->
-    Node='etcd_c201@c201',
-    Result=case connect_etcd(Node,20*1000,1000,false) of
-	       false->
-		   {error,["Can't connect to Etcd",?MODULE,?LINE]};
-	       true->
-		   {ok,Node}
-	   end,
-    Result.
-connect_etcd(_Node,0,_Sleep,Boolean)->
-    Boolean;
-connect_etcd(_Node,_TimeLeft,_Sleep,true)->
-    true;
-connect_etcd(Node,TimeLeft,Sleep,Boolean)->
-    case rpc:call(Node,etcd,ping,[],5000) of
-	pong->
-	    NewTimeLeft=0,
-	    NewBoolean=true;
-	_ ->
-	    timer:sleep(Sleep),
-	    NewTimeLeft=TimeLeft-Sleep,
-	    NewBoolean=false
-    end,
-    connect_etcd(Node,NewTimeLeft,Sleep,NewBoolean).
