@@ -1,0 +1,3 @@
+%% encoding: UTF-8
+{application,phoscon_service}.
+{modules,[lib_phoscon,phoscon]}.
