@@ -146,28 +146,8 @@ ping() ->
 %%          {stop, Reason}
 %% --------------------------------------------------------------------
 init([]) ->
-
-    %% Resources discovery
-    [rd:add_local_resource(ResourceType,Resource)||{ResourceType,Resource}<-?LocalResourceTuples],
-    [rd:add_target_resource_type(TargetType)||TargetType<-?TargetTypes],
-    rd:trade_resources(),
-    
- 
-
-    {ConbeeAddr,ConbeePort,ConbeeKey}=lib_phoscon:get_conbee_info(),
-    application:ensure_all_started(gun),
-    os:cmd("docker restart "++?ConbeeContainer),
-    timer:sleep(5*1000),
-    
-    ?LOG_NOTICE("Server started ",["Servere started",node(),
-				   ip_addr,ConbeeAddr,
-				   ip_port,ConbeePort,
-				   crypto,ConbeeKey]),
    
-    {ok, #state{device_info=undefined,
-	        ip_addr=ConbeeAddr,
-		ip_port=ConbeePort,
-		crypto=ConbeeKey},0
+    {ok, #state{},0
     }.   
  
 
